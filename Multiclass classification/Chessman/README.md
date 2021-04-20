@@ -17,4 +17,4 @@ Transfer learning model
 + test_acc:  0.7321428656578064
 + elapsed time (in sec):  313.96853137016296
 
-dataset by https://www.kaggle.com/niteshfre/chessman-image-dataset
+dataset from https://www.kaggle.com/niteshfre/chessman-image-dataset
