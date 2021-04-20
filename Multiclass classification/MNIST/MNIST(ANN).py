@@ -1,3 +1,5 @@
+import time
+
 from tensorflow.keras.datasets import mnist
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras import layers, models
@@ -24,9 +26,11 @@ model.add(layers.Dense(10, activation='softmax'))
 model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Fitting
+start_time = time.time()
 model.fit(X_train, Y_train_, epochs=20, batch_size=128, validation_split=0.2,
           callbacks=[EarlyStopping(monitor='val_loss', patience=2)])
 
 # Evaluation
 test_loss, test_acc = model.evaluate(X_test, Y_test_)
 print('test_acc: ', test_acc)
+print('elapsed time (in sec): ', time.time() - start_time)
