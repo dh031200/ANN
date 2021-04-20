@@ -5,7 +5,7 @@ Binary_classification
 
 Multiclass classification
   + Chessman  (V)
-  + MNIST (processing)
+  + MNIST (V)
 
 Regression
   + Winequality-red (V)
