@@ -61,7 +61,7 @@ def print_mean_sd(tr_l, tr_a, te_l, te_a):
     print(f'test_acc: {np.mean(te_a):.5f} ± {np.std(te_a):.5f}\n')
 
 
-# Q2
+# Q2 Train 5 time and print each acc, loss
 print("\n---- Q2 ----")
 for i in range(5):
     model = build_model('relu')
@@ -72,7 +72,7 @@ for i in range(5):
     print(f'Training loss: {eval_train[0]:.5f}  Training accuracy: {eval_train[1]:.5f}')
     print(f'Test loss: {eval_test[0]:.5f}  Test accuracy: {eval_test[1]:.5f}')
 
-# Q3
+# Q3 Train models by different activation function
 print("\n---- Q3 ----")
 funcs = [None, 'relu', 'sigmoid', 'tanh']
 for i in funcs:
@@ -89,7 +89,7 @@ for i in funcs:
     print("activation function: ", i)
     print_mean_sd(train_loss, train_acc, test_loss, test_acc)
 
-# Q4
+# Q4 Train models by different number of neurons
 print("\n---- Q4 ----")
 num_of_neurons = [2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000]
 for i in num_of_neurons:
@@ -106,7 +106,7 @@ for i in num_of_neurons:
     print("number of hidden neurons: ", i)
     print_mean_sd(train_loss, train_acc, test_loss, test_acc)
 
-# Q E2
+# Q E2 Get weights and bias
 print("\n---- Q E2 ----")
 model = models.Sequential()
 model.add(layers.Dense(1, activation='sigmoid', input_shape=(x_train.shape[1],)))
