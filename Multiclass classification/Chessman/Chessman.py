@@ -110,7 +110,7 @@ def build_model():
 # Pretrained model
 start_time = time.time()
 model = build_model()
-history = model.fit(train_generator, epochs=50, validation_data=valid_generator,
+history = model.fit_generator(train_generator, epochs=50, validation_data=valid_generator,
                     callbacks=[EarlyStopping(monitor='val_loss', patience=3),
                                ModelCheckpoint('Chessman_pretrained.h5', monitor='val_loss', verbose=1,
                                                save_best_only=True, mode='min')])
