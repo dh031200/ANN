@@ -5,7 +5,7 @@ from keras import models, layers, optimizers
 
 import matplotlib.pyplot as plt
 
-plaidml.keras.install_backend()
+plaidml.keras.install_backend()     # for gpu
 # data loading
 (X_train, Y_train), (X_test, Y_test) = cifar10.load_data()
 
