@@ -8,6 +8,7 @@ Binary_classification
 Multiclass classification
   + Chessman  (V)
   + MNIST (V)
+  + CIFAR10 (V)
 
 Regression
   + Winequality-red (V)
