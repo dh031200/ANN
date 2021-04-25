@@ -1,5 +1,7 @@
 big data set
+
 ![basic_model](https://user-images.githubusercontent.com/66017052/115997403-f33c2680-a61d-11eb-8276-858d4712e500.png)
+
 basic model (steps_per_epoch = 100, validation_steps=50)
   + train_acc: 0.8334375140815973
   + test_acc: 0.8400000159740448
