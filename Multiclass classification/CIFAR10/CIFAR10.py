@@ -33,13 +33,13 @@ def build_model():
     # Dropout layer
     model.add(layers.Dropout(0.25))
     # copy-and-paste 2 conv2d layers, max pooling layer, dropout layer
-    # model.add(layers.Conv2D(32, kernel_size=(3, 3), activation='relu'))
-    # model.add(layers.Conv2D(64, (3, 3), activation='relu'))
-    # model.add(layers.MaxPooling2D(pool_size=(2, 2)))
-    # model.add(layers.Dropout(0.25))
+    model.add(layers.Conv2D(32, kernel_size=(3, 3), activation='relu'))
+    model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+    model.add(layers.MaxPooling2D(pool_size=(2, 2)))
+    model.add(layers.Dropout(0.25))
     # Fully connected MLP
     model.add(layers.Flatten())
-    model.add(layers.Dense(512, activation='relu'))
+    model.add(layers.Dense(128, activation='relu'))
     # Dropout layer
     model.add(layers.Dropout(0.5))
     # Output layer
