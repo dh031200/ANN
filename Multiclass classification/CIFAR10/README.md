@@ -9,4 +9,6 @@ CIFAR 10 with CNN
   + elapsed time (in sec):  1318.0662128925323
 
 CIFAR10 model structure
+
 ![CIFAR10](https://user-images.githubusercontent.com/66017052/115998420-1537a800-a622-11eb-8148-32f2d6e38436.png)
+
