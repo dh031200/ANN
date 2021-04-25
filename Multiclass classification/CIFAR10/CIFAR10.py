@@ -49,7 +49,6 @@ def build_model():
     return model
 
 
-# main loop without cross-validation
 import time
 
 start_time = time.time()
