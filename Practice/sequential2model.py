@@ -1,4 +1,5 @@
 from tensorflow.keras import models, layers, optimizers
+from tensorflow.keras.applications import VGG16
 
 input_shape = [150, 150, 3]
 
@@ -34,9 +35,17 @@ def build_model_M():
     return model
 
 
+def build_model_T():
+    x = layers.Input(shape=(256,256,3))
+    conv_base = VGG16(weights='imagenet', include_top=False,input_shape=(256,256,3))(x)
+    model = models.Model(conv_base.input, conv_base.layers[-1].output)
+
+    model.compile(optimizer=optimizers.RMSprop(lr=1e-4), loss='binary_crossentropy', metrics=['accuracy'])
+    return model
+
 model_s = build_model()
 model_m = build_model_M()
-
+model_t = build_model_T()
 model_s.summary()
 print("\n\n\n")
 model_m.summary()
