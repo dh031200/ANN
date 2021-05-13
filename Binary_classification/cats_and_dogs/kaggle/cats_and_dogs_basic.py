@@ -1,10 +1,9 @@
 import os
 import shutil
-import time
+
 import plaidml.keras  # for gpu
 from keras.preprocessing.image import ImageDataGenerator
-from keras import models, layers, optimizers
-from keras.applications import InceptionV3
+from keras import models, layers, optimizers, callbacks
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -28,7 +27,7 @@ def mk_dir(path, n=False):
 #                                                                   └─  dogs.
 
 # Set path
-root_path = './datasets/'
+root_path = '../datasets/'
 data_path = root_path + 'train/'
 # small_path = root_path + 'cats_and_dogs_small/'
 # train_path = small_path + 'train/'
@@ -116,18 +115,45 @@ input_shape = [150, 150, 3]  # as a shape of image
 
 def build_model():
     model = models.Sequential()
-    conv_base = InceptionV3(weights='imagenet',
-                            include_top=False,
-                            input_shape=input_shape)
-    conv_base.trainable = False
-    model.add(conv_base)
+    model.add(layers.Conv2D(32, (3, 3), activation='relu',
+                            input_shape=input_shape))
+    model.add(layers.MaxPooling2D((2, 2)))
+    model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+    model.add(layers.MaxPooling2D((2, 2)))
+    model.add(layers.Dropout(0.25))
+    model.add(layers.Conv2D(128, (3, 3), activation='relu'))
+    model.add(layers.MaxPooling2D((2, 2)))
+    model.add(layers.Conv2D(128, (3, 3), activation='relu'))
+    model.add(layers.MaxPooling2D((2, 2)))
     model.add(layers.Flatten())
     model.add(layers.Dense(512, activation='relu'))
+    model.add(layers.Dropout(0.5))
     model.add(layers.Dense(1, activation='sigmoid'))
     # compile
     model.compile(optimizer=optimizers.RMSprop(lr=1e-4),
                   loss='binary_crossentropy', metrics=['accuracy'])
     return model
+
+
+# main loop without cross-validation
+import time
+
+start_time = time.time()
+num_epochs = 100
+model = build_model()
+history = model.fit_generator(train_generator, epochs=num_epochs, steps_per_epoch=8000 // 32, verbose=1,
+                              validation_data=validation_generator, validation_steps=2000 // 32,
+                              callbacks=callbacks.EarlyStopping(monitor='val_loss', patience=5))
+
+# saving the model
+model.save('cats_and_dogs_small_1.h5')
+
+# evaluation
+train_loss, train_acc = model.evaluate_generator(train_generator, verbose=1)
+test_loss, test_acc = model.evaluate_generator(test_generator, verbose=1)
+print('train_acc:', train_acc)
+print('test_acc:', test_acc)
+print("elapsed time (in sec): ", time.time() - start_time)
 
 
 # visualization
@@ -149,78 +175,18 @@ def plot_loss(h, title="loss"):
     plt.legend(['Training', 'Validation'], loc=0)
 
 
-# Pretrain start
-start_time = time.time()
-num_epochs = 50
-model = build_model()
-history = model.fit_generator(train_generator, epochs=num_epochs, steps_per_epoch=8000 // 32, verbose=1,
-                              validation_data=validation_generator, validation_steps=2000 // 32)
-
-# Saving the model
-model.save('cats_and_dogs_pretrained.h5')
-
 # Plot
 plot_loss(history)
-plt.savefig('cats_and_dogs_pretrain_loss.png')
+plt.savefig('cats_and_dogs_loss.png')
 plt.clf()
 plot_acc(history)
-plt.savefig('cats_and_dogs_pretrain_acc.png')
-
-# Evaluation
-train_loss, train_acc = model.evaluate_generator(train_generator, verbose=1)
-test_loss, test_acc = model.evaluate_generator(test_generator, verbose=1)
-print('train_acc:', train_acc)
-print('test_acc:', test_acc)
-print("elapsed time (in sec): ", time.time() - start_time)
-
-# Predict
-predict = model.predict_generator(submission_test_generator, verbose=1)
-print("elapsed time (in sec): ", time.time() - start_time)
-
-# Organize predict & make csv
-predict_id = []
-predict = predict.reshape(predict.shape[0])
-for i in range(predict.shape[0]):
-    predict_id.append(i + 1)
-    if predict[i] > 0.5:
-        predict[i] = 0
-    else:
-        predict[i] = 1
-
-output = pd.DataFrame({'id': predict_id,
-                       'label': predict})
-output.to_csv('cats_and_dogs_pretrained.csv', index=False)
-
-# Fine-tune start line -----
-# Load InceptionV3
-conv_inception = model.layers[0]
-
-# Change trainable setting for Fine-tune top 2 inception blocks
-for layer in conv_inception.layers[:249]:
-    layer.trainable = False
-for layer in conv_inception.layers[249:]:
-    layer.trainable = True
-
-# Compile
-model.compile(optimizer=optimizers.SGD(lr=0.0001, momentum=0.9), loss='binary_crossentropy', metrics=['accuracy'])
-
-# reset time & fit
-start_time = time.time()
-history = model.fit_generator(train_generator, epochs=num_epochs, steps_per_epoch=8000 // 32, verbose=1,
-                              validation_data=validation_generator, validation_steps=2000 // 32)
-
-# Plot
-plot_loss(history)
-plt.savefig('cats_and_dogs_final_loss.png')
-plt.clf()
-plot_acc(history)
-plt.savefig('cats_and_dogs_final_acc.png')
+plt.savefig('cats_and_dogs_acc.png')
 
 # Predict test data
 predict = model.predict_generator(submission_test_generator, verbose=1)
 print("elapsed time (in sec): ", time.time() - start_time)
 
-# Organize predict & make csv
+# organize predict & make csv
 predict_id = []
 predict = predict.reshape(predict.shape[0])
 for i in range(predict.shape[0]):
@@ -232,4 +198,4 @@ for i in range(predict.shape[0]):
 
 output = pd.DataFrame({'id': predict_id,
                        'label': predict})
-output.to_csv('cats_and_dogs_final.csv', index=False)
+output.to_csv('cats_and_dogs.csv', index=False)

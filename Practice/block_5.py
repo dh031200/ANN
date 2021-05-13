@@ -4,7 +4,7 @@ from keras.models import load_model
 import numpy as np
 import matplotlib.pyplot as plt
 
-model = load_model('../Binary_classification/cats_and_dogs/cats_and_dogs_small_2.h5')
+model = load_model('../Binary_classification/cats_and_dogs/kaggle/cats_and_dogs_small_2.h5')
 # model = VGG16(weights='imagenet', include_top=False)
 model.summary()
 

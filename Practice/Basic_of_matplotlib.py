@@ -17,7 +17,7 @@ plt.imshow(img_tensor[0])
 plt.show()
 
 # Load model (from Binary_class/cats_and_dogs)
-model = load_model('../Binary_classification/cats_and_dogs/cats_and_dogs_small_1.h5')
+model = load_model('../Binary_classification/cats_and_dogs/kaggle/cats_and_dogs_small_1.h5')
 model.summary()
 
 # Define a new model, which is input to model's 0th ~ 7th layers' outputs
