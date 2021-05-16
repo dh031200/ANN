@@ -1,3 +1,5 @@
+import os
+import shutil
 from google_images_download import google_images_download
 
 
@@ -13,12 +15,50 @@ def imageCrawling(keyword, dir):
     print(path)
 
 
-# african elephant
-imageCrawling('forest elephant', './datasets/crawl/forest elephant')
-imageCrawling('African bush elephant', './datasets/crawl/African bush elephant')
-imageCrawling('sub-Saharan Africa elephants', './datasets/crawl/sub-Saharan Africa elephants')
+# crawled path
+african = './datasets/african/'
+indian = './datasets/Indian/'
 
-# asian elephant
-imageCrawling('Asian elephants', './datasets/crawl/Asian elephants')
-imageCrawling('Indian elephants', './datasets/crawl/Indian elephants')
-imageCrawling('Elephas maximus', './datasets/crawl/Elephas maximus')
+# African elephant
+imageCrawling('forest elephant', african)
+imageCrawling('African bush elephant', african)
+imageCrawling('sub-Saharan Africa elephants', african)
+
+# Indian elephant
+imageCrawling('Asian elephants', indian)
+imageCrawling('Indian elephants', indian)
+imageCrawling('Elephas maximus', indian)
+
+# Set path
+train_path = './datasets/train/'
+valid_path = './datasets/valid/'
+test_path = './datasets/test/'
+
+
+def mk_dir(path):
+    os.mkdir(path)
+    os.mkdir(path + 'Indian_elephant')
+    os.mkdir(path + 'African_elephant')
+
+
+mk_dir(train_path)
+mk_dir(valid_path)
+mk_dir(test_path)
+
+# Split data
+img_list = os.listdir(african)
+for img in img_list[:500]:
+    shutil.move(african + img, train_path + '/African_elephant')
+for img in img_list[500:700]:
+    shutil.move(african + img, valid_path + '/African_elephant')
+for img in img_list[700:]:
+    shutil.move(african + img, test_path + '/African_elephant')
+print('African elephant dataset moved')
+img_list = os.listdir('./datasets/Indian')
+for img in img_list[:500]:
+    shutil.move(indian + img, train_path + '/Indian_elephant')
+for img in img_list[500:700]:
+    shutil.move(indian + img, valid_path + '/Indian_elephant')
+for img in img_list[700:]:
+    shutil.move(indian + img, test_path + '/Indian_elephant')
+print('Indian elephant dataset moved')
