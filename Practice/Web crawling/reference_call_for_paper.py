@@ -19,7 +19,7 @@ for tr in results:
         table.append(row)
 
 for i in table:
-    print('|    ',end='')
+    print('|    ', end='')
     for j in i:
         # if len(i) > max_len:
         #     len = max_len
