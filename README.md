@@ -5,7 +5,7 @@ Binary_classification
   + Titanic (V)
   + cats vs dogs (V)
   + chest_X-ray_images (V)
-  + job_apply (V)
+  + job_apply (...)
 
 Multiclass classification
   + Chessman  (V)
