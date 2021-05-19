@@ -4,6 +4,8 @@ Binary_classification
   + breast-cancer-wisconsin (V)
   + Titanic (V)
   + cats vs dogs (V)
+  + chest_X-ray_images (V)
+  + job_apply (V)
 
 Multiclass classification
   + Chessman  (V)
