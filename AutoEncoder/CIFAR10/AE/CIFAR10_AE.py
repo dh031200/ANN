@@ -93,7 +93,7 @@ def show_ae(autoencoder, X_test):
 
 def main():
     x_nodes = 32 * 32 * 3
-    z_dim = 360
+    z_dim = 36
     (X_train, X_test) = data_load()
     autoencoder = AE(x_nodes, z_dim)
     autoencoder.summary()
@@ -104,13 +104,13 @@ def main():
                               validation_data=(X_test, X_test))
 
     plot_Loss(history)
-    plt.savefig('ae_cifar10_1080.loss.png')
+    plt.savefig('ae_cifar10_36.loss.png')
     plt.clf()
     plot_Accuracy(history)
-    plt.savefig('ae_cifar10_1080.acc.png')
+    plt.savefig('ae_cifar10_36.acc.png')
 
     show_ae(autoencoder, X_test)
-    plt.savefig('ae_cifar10_1080.predicted.png')
+    plt.savefig('ae_cifar10_36.predicted.png')
     plt.show()
 
 
