@@ -14,3 +14,10 @@ Multiclass classification
 
 Regression
   + Winequality-red (V)
+
+Auto-encoder
+  + MNIST (V)
+  + CIFAR10 (V)
+
+U-NET
+  + CIFAR10 (V)
