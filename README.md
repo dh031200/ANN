@@ -5,6 +5,7 @@ Binary_classification
   + Titanic (V)
   + cats vs dogs (V)
   + chest_X-ray_images (V)
+  + imdb (V)
   + job_apply (...)
 
 Multiclass classification
@@ -21,3 +22,6 @@ Auto-encoder
 
 U-NET
   + CIFAR10 (V)
+
+RNN
+  + jena_climate
