@@ -1,5 +1,8 @@
 import os
 import numpy as np
+from tensorflow.keras import layers, models
+import matplotlib.pyplot as plt
+import copy
 
 
 class Data():
@@ -25,7 +28,6 @@ class Data():
         Data.normalize(self)
 
     def normalize(self):
-        import copy
         self.data = copy.deepcopy(self.float_data)
         mean = self.data[:self.train_set_length].mean(axis=0)
         self.data -= mean
@@ -73,29 +75,48 @@ class Data():
                 targets[j] = self.data[rows[j] + delay - 1][1]
             yield samples, targets
 
-    def main(ratio=[0.5, 0.25, 0.25], lookback=1440, step=6, delay=144, batch_size=128, epochs=20):
-        fname = './jena_climate/jena_climate_2009_2016.csv'
-        dataset = Data(fname, ratio)
-        dataset.get_generators(lookback=lookback, delay=delay, batch_size=batch_size)
 
-        from tensorflow.keras import layers, models
+def main(ratio=[0.5, 0.25, 0.25], lookback=2880, step=6, delay=144, batch_size=128, epochs=20):
+    fname = './jena_climate/jena_climate_2009_2016.csv'
+    dataset = Data(fname, ratio)
+    dataset.get_generators(lookback=lookback, delay=delay, batch_size=batch_size, step=step)
 
-        model = models.Sequential()
-        model.add(layers.SimpleRNN(32, activation='relu'))
-        model.add(layers.Dense(1))
-        model.compile(optimizer='RMSprop', loss='mae')
+    # # Simple ANN
+    # model = models.Sequential()
+    # model.add(layers.Flatten(input_shape=(lookback // step, dataset.data.shape[-1])))
+    # model.add(layers.Dense(32, activation='relu'))
+    # model.add(layers.Dense(1))
+    # model.compile(optimizer='RMSprop', loss='mae')
 
-        history = model.fit(dataset.train_gen, steps_per_epoch=500, epochs=epochs, validation_data=dataset.val_gen,
-                            validation_steps=dataset.val_steps)
+    # # Simple RNN
+    # model = models.Sequential()
+    # model.add(layers.SimpleRNN(32, activation='relu'))
+    # model.add(layers.Dense(1))
+    # model.compile(optimizer='RMSprop', loss='mae')
 
-        train_loss = model.evaluate(dataset.train_gen, steps=dataset.val_steps)
-        test_loss = model.evaluate(dataset.test_gen, steps=dataset.test_steps)
-        print('train_loss: ', train_loss)
-        print('test loss: ', test_loss)
+    # Simple LSTM
+    model = models.Sequential()
+    model.add(layers.LSTM(32))
+    model.add(layers.Dense(1))
+    model.compile(optimizer='RMSprop', loss='mae')
 
-        import matplotlib.pyplot as plt
+    # model.summary()
 
-        plt.plot(range(0, epochs), history.history['loss'], 'b')
-        plt.plot(range(0, epochs), history.history['val_loss'], 'g')
-        plt.legend(('train loss', 'val_loss'))
-        plt.savefig('RNN loss.png')
+    history = model.fit(dataset.train_gen, steps_per_epoch=500, epochs=epochs, validation_data=dataset.val_gen,
+                        validation_steps=dataset.val_steps)
+
+    model.summary()
+
+    train_loss = model.evaluate(dataset.train_gen, steps=dataset.val_steps)
+    test_loss = model.evaluate(dataset.test_gen, steps=dataset.test_steps)
+    print('train_loss: ', train_loss)
+    print('test_loss: ', test_loss)
+
+    # plt.plot(range(0, epochs), history.history['loss'], 'b')
+    # plt.plot(range(0, epochs), history.history['val_loss'], 'g')
+    # plt.legend(('train_loss', 'val_loss'))
+    # plt.savefig('RNN loss_simple_LSTM.png')
+
+
+if __name__ == '__main__':
+    main()
