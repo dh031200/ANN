@@ -22,6 +22,7 @@ Auto-encoder
 
 U-NET
   + CIFAR10 (V)
+  + CIFAR10_colorization (V)
 
 RNN
   + jena_climate
