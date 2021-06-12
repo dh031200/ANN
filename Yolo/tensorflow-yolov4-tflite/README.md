@@ -3,6 +3,12 @@ original source : https://github.com/hunglc007/tensorflow-yolov4-tflite   (hungl
 I needed the coordinates of the detected object.
 So I added some code to core/utils.py.
 
+changed: 
+
+[center coordinate](https://github.com/dh031200/ANN/blob/master/Yolo/tensorflow-yolov4-tflite/core/utils.py#L157 "center")
+
+[count each class](https://github.com/dh031200/ANN/blob/master/Yolo/tensorflow-yolov4-tflite/core/utils.py#L170 "count")
+
 The result is as shown in the image below.
 
 ![coordinate](https://user-images.githubusercontent.com/66017052/121765705-d5a02d80-cb87-11eb-91ee-524968f9d9a1.png)
